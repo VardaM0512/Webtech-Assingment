@@ -1,5 +1,7 @@
 # SPLICE — an archive of classic Hindi films & songs
 
+**Live site:** https://webtech-assingment-1.onrender.com/
+
 Full-stack web technology project (ICT 3131) by Varda Murarka (240911548) and Aadya Chhavi Mishra (240911602), under Dr. Rajashree Krishna. Node.js + Express renders EJS pages on the server and stores everything in a Supabase (PostgreSQL) database.
 
 ## Features
