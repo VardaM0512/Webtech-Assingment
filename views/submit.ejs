@@ -1,0 +1,79 @@
+<%- include('partials/header') %>
+
+<section class="page-head">
+  <h1 class="big">Pin it<br>to the <span class="accent">wall</span></h1>
+  <p class="mono">Add a film or song to the archive. The poster updates as you type. New entries appear once an admin approves them.</p>
+</section>
+
+<section class="submit-layout">
+  <form action="/submit" method="POST" class="card" id="submit-form" data-validate>
+    <% if (error) { %><p class="error" role="alert"><%= error %></p><% } %>
+
+    <label class="field">
+      <span class="mono">Title</span>
+      <input name="title" value="<%= values.title || '' %>" required minlength="2" maxlength="80">
+    </label>
+
+    <fieldset class="chips">
+      <legend class="mono">Format</legend>
+      <label><input type="radio" name="kind" value="film" <%= values.kind === 'film' ? 'checked' : '' %>><span>Film</span></label>
+      <label><input type="radio" name="kind" value="song" <%= values.kind === 'song' ? 'checked' : '' %>><span>Song</span></label>
+    </fieldset>
+
+    <label class="field" id="film-field">
+      <span class="mono">From the film <small>(optional)</small></span>
+      <select name="film_id">
+        <option value="">— Not linked —</option>
+        <% films.forEach(f => { %>
+          <option value="<%= f.id %>" <%= Number(values.film_id) === f.id ? 'selected' : '' %>><%= f.title %> (<%= f.year %>)</option>
+        <% }) %>
+      </select>
+    </label>
+
+    <div class="row">
+      <label class="field grow">
+        <span class="mono" id="creator-label">Made by</span>
+        <input name="creator" value="<%= values.creator || '' %>" required minlength="2">
+      </label>
+      <label class="field">
+        <span class="mono">Year</span>
+        <input type="number" name="year" value="<%= values.year || '' %>" required min="1900" max="<%= new Date().getFullYear() %>">
+      </label>
+    </div>
+
+    <label class="field">
+      <span class="mono">Genre</span>
+      <input name="genre" value="<%= values.genre || '' %>" required minlength="2" list="genre-list">
+      <datalist id="genre-list">
+        <option>Drama</option><option>Romance</option><option>Action</option><option>Comedy</option><option>Crime</option><option>Thriller</option><option>Dance</option><option>Philosophical</option><option>Friendship</option>
+      </datalist>
+    </label>
+
+    <label class="field">
+      <span class="mono">Synopsis <small id="syn-count">0 / 400</small></span>
+      <textarea name="synopsis" rows="4" required minlength="20" maxlength="400"><%= values.synopsis || '' %></textarea>
+    </label>
+
+    <fieldset class="swatches">
+      <legend class="mono">Poster colour</legend>
+      <% ['red', 'blue', 'yellow', 'ink'].forEach(c => { %>
+        <label class="swatch swatch-<%= c %>"><input type="radio" name="color" value="<%= c %>" <%= values.color === c ? 'checked' : '' %>><span class="sr"><%= c %></span></label>
+      <% }) %>
+    </fieldset>
+
+    <button class="btn btn-block">Pin to archive →</button>
+  </form>
+
+  <div class="preview-wrap" aria-hidden="true">
+    <p class="mono">Live preview</p>
+    <div class="poster poster-red" id="preview">
+      <span class="poster-kind">film</span>
+      <span class="poster-title">Your title</span>
+      <span class="poster-meta">Maker · Year</span>
+      <span class="poster-no">№NEW</span>
+    </div>
+  </div>
+</section>
+
+<script src="/js/submit.js" defer></script>
+<%- include('partials/footer') %>

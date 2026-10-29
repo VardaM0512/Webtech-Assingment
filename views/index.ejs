@@ -1,0 +1,46 @@
+<%- include('partials/header') %>
+
+<section class="hero">
+  <p class="mono hero-tag">Vol. 01 — Classic Hindi cinema</p>
+  <h1 class="hero-title">
+    <span class="line"><span>Old</span></span>
+    <span class="line"><span>reels,</span></span>
+    <span class="line"><span class="accent">still loud.</span></span>
+  </h1>
+  <div class="hero-side">
+    <p>SPLICE is an open archive of classic Hindi films, from Sholay to Mughal-e-Azam. Find them, rate them, keep them.</p>
+    <div class="hero-actions">
+      <a href="/archive" class="btn">Enter the archive →</a>
+      <a href="/submit" class="btn btn-ghost">Add your work</a>
+    </div>
+  </div>
+  <div class="sticker" aria-hidden="true">Free<br>to<br>read</div>
+</section>
+
+<section class="stats" aria-label="Archive in numbers">
+  <div class="stat"><span class="count" data-to="<%= stats.films %>">0</span><span class="mono">films</span></div>
+  <div class="stat"><span class="count" data-to="<%= stats.songs %>">0</span><span class="mono">songs</span></div>
+  <div class="stat"><span class="count" data-to="<%= stats.reviews %>">0</span><span class="mono">reviews</span></div>
+</section>
+
+<section class="section">
+  <div class="section-head">
+    <h2>Just pinned</h2>
+    <a href="/archive" class="mono">See all →</a>
+  </div>
+  <div class="poster-grid">
+    <% latest.forEach(e => { %><%- include('partials/poster', { e }) %><% }) %>
+  </div>
+</section>
+
+<section class="manifesto">
+  <p class="mono">How it works</p>
+  <ol>
+    <li><span>01</span> Browse the archive by genre, year or format.</li>
+    <li><span>02</span> Save what you want to watch or hear to your shelf.</li>
+    <li><span>03</span> Leave a rating and a few honest words.</li>
+    <li><span>04</span> Climb the charts — the best rated rise to the top.</li>
+  </ol>
+</section>
+
+<%- include('partials/footer') %>

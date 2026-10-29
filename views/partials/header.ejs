@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title><%= title %> — SPLICE</title>
+  <meta name="description" content="SPLICE is an open archive of classic Hindi films and songs.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter+Tight:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="topbar">
+    <a href="/" class="logo" aria-label="SPLICE home">SPL<span>/</span>ICE</a>
+    <button class="menu-btn" aria-expanded="false" aria-controls="nav">Menu</button>
+    <nav id="nav" aria-label="Main">
+      <a href="/" class="<%= path === '/' ? 'active' : '' %>">Home</a>
+      <a href="/archive" class="<%= path === '/archive' ? 'active' : '' %>">Archive</a>
+      <a href="/charts" class="<%= path === '/charts' ? 'active' : '' %>">Charts</a>
+      <a href="/submit" class="<%= path === '/submit' ? 'active' : '' %>">Submit</a>
+      <% if (user && user.role === 'admin') { %>
+        <a href="/admin" class="<%= path === '/admin' ? 'active' : '' %>">Admin</a>
+      <% } %>
+      <% if (user) { %>
+        <a href="/profile" class="<%= path === '/profile' ? 'active' : '' %>">My shelf</a>
+        <form action="/logout" method="POST" class="inline"><button class="link">Log out</button></form>
+      <% } else { %>
+        <a href="/login" class="<%= path === '/login' ? 'active' : '' %>">Log in</a>
+        <a href="/signup" class="btn btn-sm">Join</a>
+      <% } %>
+    </nav>
+  </header>
+
+  <main id="main">

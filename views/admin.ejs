@@ -1,0 +1,58 @@
+<%- include('partials/header') %>
+
+<section class="page-head">
+  <p class="mono">Control room</p>
+  <h1 class="big">Admin<br><span class="accent">desk</span></h1>
+</section>
+
+<section class="stats admin-stats" aria-label="Site totals">
+  <div class="stat"><span class="count" data-to="<%= totals.users %>">0</span><span class="mono">members</span></div>
+  <div class="stat"><span class="count" data-to="<%= totals.entries %>">0</span><span class="mono">live entries</span></div>
+  <div class="stat"><span class="count" data-to="<%= totals.reviews %>">0</span><span class="mono">reviews</span></div>
+  <div class="stat"><span class="count accent" id="pending-count" data-to="<%= totals.pending %>">0</span><span class="mono">waiting</span></div>
+</section>
+
+<section class="section">
+  <div class="section-head"><h2>Submissions to review</h2></div>
+  <% if (pending.length) { %>
+    <div class="queue">
+      <% pending.forEach(e => { %>
+        <article class="queue-item card reveal" data-id="<%= e.id %>">
+          <div class="poster poster-<%= e.color %> mini">
+            <span class="poster-kind"><%= e.kind %></span>
+            <span class="poster-title"><%= e.title %></span>
+          </div>
+          <div class="queue-info">
+            <p class="mono"><%= e.kind %> / <%= e.genre %> / <%= e.year %> · sent by <%= e.users ? e.users.name : 'unknown' %></p>
+            <h3><a href="/entry/<%= e.id %>"><%= e.title %></a></h3>
+            <p><%= e.creator %> — <%= e.synopsis %></p>
+            <div class="queue-actions">
+              <button class="btn btn-sm" data-status="approved">✓ Approve</button>
+              <button class="btn btn-ghost btn-sm" data-status="rejected">✕ Reject</button>
+            </div>
+          </div>
+        </article>
+      <% }) %>
+    </div>
+  <% } %>
+  <p class="card empty" id="queue-empty" <%= pending.length ? 'hidden' : '' %>>All caught up — nothing waiting for approval.</p>
+</section>
+
+<section class="section">
+  <div class="section-head"><h2>Latest reviews</h2></div>
+  <ul class="review-list" id="review-list">
+    <% recent.forEach(r => { %>
+      <li class="review" data-id="<%= r.id %>">
+        <div class="review-top">
+          <span><strong><%= r.users ? r.users.name : 'Anonymous' %></strong> on <a href="/entry/<%= r.entries.id %>"><%= r.entries.title %></a></span>
+          <span class="stars-static"><%= '★'.repeat(r.rating) %><span><%= '★'.repeat(5 - r.rating) %></span></span>
+        </div>
+        <p><%= r.body %></p>
+        <span class="review-tools"><button class="link mono" data-action="delete">Delete</button></span>
+      </li>
+    <% }) %>
+  </ul>
+</section>
+
+<script src="/js/admin.js" defer></script>
+<%- include('partials/footer') %>

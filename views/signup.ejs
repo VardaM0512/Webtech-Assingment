@@ -1,0 +1,31 @@
+<%- include('partials/header') %>
+
+<section class="auth">
+  <div class="auth-art" aria-hidden="true">
+    <span>Pull</span><span>up a</span><span class="accent">chair.</span>
+  </div>
+
+  <form action="/signup" method="POST" class="card auth-form" data-validate>
+    <h1>Join SPLICE</h1>
+    <% if (error) { %><p class="error" role="alert"><%= error %></p><% } %>
+
+    <label class="field">
+      <span class="mono">Name</span>
+      <input type="text" name="name" value="<%= values.name || '' %>" required minlength="2" autocomplete="name">
+    </label>
+    <label class="field">
+      <span class="mono">Email</span>
+      <input type="email" name="email" value="<%= values.email || '' %>" required autocomplete="email">
+    </label>
+    <label class="field">
+      <span class="mono">Password <small>(min 6 characters)</small></span>
+      <input type="password" name="password" required minlength="6" autocomplete="new-password" id="pw">
+      <span class="meter" aria-hidden="true"><span id="pw-meter"></span></span>
+    </label>
+
+    <button class="btn btn-block">Create account →</button>
+    <p class="mono small">Already a member? <a href="/login">Log in</a></p>
+  </form>
+</section>
+
+<%- include('partials/footer') %>

@@ -1,0 +1,87 @@
+<%- include('partials/header') %>
+
+<section class="page-head">
+  <p class="mono"><%= user.email %><%= user.role === 'admin' ? ' · admin' : '' %></p>
+  <h1 class="big"><%= user.name.split(' ')[0] %>'s<br><span class="accent">shelf</span></h1>
+</section>
+
+<div class="tabs" role="tablist">
+  <button role="tab" aria-selected="true" data-tab="saved">Saved <sup><%= saved.length %></sup></button>
+  <button role="tab" aria-selected="false" data-tab="reviews">Reviews <sup><%= reviews.length %></sup></button>
+  <button role="tab" aria-selected="false" data-tab="submitted">Submitted <sup><%= submitted.length %></sup></button>
+  <button role="tab" aria-selected="false" data-tab="settings">Settings</button>
+</div>
+
+<section class="tab-panel" id="saved" role="tabpanel">
+  <% if (saved.length) { %>
+    <div class="poster-grid">
+      <% saved.forEach(e => { %>
+        <div class="shelf-item" data-id="<%= e.id %>">
+          <%- include('partials/poster', { e }) %>
+          <button class="remove" data-id="<%= e.id %>" aria-label="Remove <%= e.title %> from shelf">✕ Remove</button>
+        </div>
+      <% }) %>
+    </div>
+  <% } else { %>
+    <p class="card empty">Your shelf is empty. <a href="/archive">Go find something →</a></p>
+  <% } %>
+</section>
+
+<section class="tab-panel" id="reviews" role="tabpanel" hidden>
+  <% if (reviews.length) { %>
+    <ul class="review-list">
+      <% reviews.forEach(r => { %>
+        <li class="review">
+          <div class="review-top">
+            <a href="/entry/<%= r.entries.id %>"><strong><%= r.entries.title %></strong></a>
+            <span class="stars-static"><%= '★'.repeat(r.rating) %><span><%= '★'.repeat(5 - r.rating) %></span></span>
+          </div>
+          <p><%= r.body %></p>
+        </li>
+      <% }) %>
+    </ul>
+  <% } else { %>
+    <p class="card empty">No reviews written yet.</p>
+  <% } %>
+</section>
+
+<section class="tab-panel" id="submitted" role="tabpanel" hidden>
+  <% if (submitted.length) { %>
+    <div class="poster-grid">
+      <% submitted.forEach(e => { %>
+        <div class="shelf-item">
+          <%- include('partials/poster', { e }) %>
+          <span class="badge badge-<%= e.status %>"><%= e.status %></span>
+        </div>
+      <% }) %>
+    </div>
+  <% } else { %>
+    <p class="card empty">Nothing pinned yet. <a href="/submit">Submit your work →</a></p>
+  <% } %>
+</section>
+
+<section class="tab-panel" id="settings" role="tabpanel" hidden>
+  <form action="/profile/settings" method="POST" class="card settings-form" data-validate>
+    <% if (flash) { %><p class="success" role="status"><%= flash %></p><% } %>
+    <% if (error) { %><p class="error" role="alert"><%= error %></p><% } %>
+    <label class="field">
+      <span class="mono">Display name</span>
+      <input name="name" value="<%= user.name %>" required minlength="2">
+    </label>
+    <p class="mono small">Change password (leave blank to keep the current one)</p>
+    <div class="row">
+      <label class="field grow">
+        <span class="mono">Current password</span>
+        <input type="password" name="current" autocomplete="current-password">
+      </label>
+      <label class="field grow">
+        <span class="mono">New password</span>
+        <input type="password" name="password" minlength="6" autocomplete="new-password">
+      </label>
+    </div>
+    <button class="btn">Save settings</button>
+  </form>
+</section>
+
+<script src="/js/profile.js" defer></script>
+<%- include('partials/footer') %>

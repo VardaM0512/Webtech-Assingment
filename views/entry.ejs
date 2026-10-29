@@ -1,0 +1,99 @@
+<%- include('partials/header') %>
+
+<% if (entry.status !== 'approved') { %>
+  <p class="status-banner status-<%= entry.status %>">
+    <%= entry.status === 'pending' ? 'Waiting for an admin to approve this entry — only you can see it for now.' : 'This entry was not approved.' %>
+  </p>
+<% } %>
+
+<article class="entry">
+  <div class="entry-poster poster poster-<%= entry.color %>">
+    <span class="poster-kind"><%= entry.kind %></span>
+    <span class="poster-title"><%= entry.title %></span>
+    <span class="poster-meta"><%= entry.creator %> · <%= entry.year %></span>
+    <span class="poster-no">№<%= String(entry.id).padStart(3, '0') %></span>
+  </div>
+
+  <div class="entry-info">
+    <p class="mono"><%= entry.kind %> / <%= entry.genre %> / <%= entry.year %></p>
+    <h1 class="big"><%= entry.title %></h1>
+    <p class="by"><%= entry.kind === 'song' ? 'sung by' : 'directed by' %> <strong><%= entry.creator %></strong></p>
+    <% if (film) { %>
+      <p class="from-film mono">From the film <a href="/entry/<%= film.id %>"><%= film.title %> (<%= film.year %>) →</a></p>
+    <% } %>
+    <p class="synopsis"><%= entry.synopsis %></p>
+
+    <div class="entry-actions">
+      <div class="score" aria-label="Average rating">
+        <span class="score-num" id="avg"><%= avg ?? '—' %></span>
+        <span class="mono">/ 5 · <span id="review-count"><%= reviews.length %></span> reviews</span>
+      </div>
+      <button class="btn <%= saved ? 'is-saved' : '' %>" id="save-btn" data-id="<%= entry.id %>" aria-pressed="<%= saved %>">
+        <%= saved ? '✓ On your shelf' : '+ Save to shelf' %>
+      </button>
+    </div>
+  </div>
+</article>
+
+<% if (songs.length) { %>
+<section class="section">
+  <div class="section-head"><h2>Songs from this film</h2><span class="mono"><%= songs.length %> tracks</span></div>
+  <ol class="tracklist">
+    <% songs.forEach((s, i) => { %>
+      <li class="reveal"><a href="/entry/<%= s.id %>">
+        <span class="track-no"><%= String(i + 1).padStart(2, '0') %></span>
+        <span class="track-title"><%= s.title %></span>
+        <span class="mono"><%= s.creator %></span>
+      </a></li>
+    <% }) %>
+  </ol>
+</section>
+<% } %>
+
+<section class="section reviews">
+  <div class="section-head"><h2>Reviews</h2></div>
+
+  <% if (user) { %>
+  <form id="review-form" class="card review-form" data-id="<%= entry.id %>" novalidate>
+    <fieldset class="stars">
+      <legend class="mono">Your rating</legend>
+      <% for (let i = 5; i >= 1; i--) { %>
+        <input type="radio" id="star<%= i %>" name="rating" value="<%= i %>">
+        <label for="star<%= i %>" title="<%= i %> stars">★</label>
+      <% } %>
+    </fieldset>
+    <label class="field">
+      <span class="mono">Your review <small id="chars">0 / 600</small></span>
+      <textarea name="body" rows="3" maxlength="600" placeholder="What stayed with you?"></textarea>
+    </label>
+    <p class="error" id="review-error" role="alert"></p>
+    <button class="btn" id="review-submit">Post review</button>
+    <button type="button" class="btn btn-ghost" id="review-cancel" hidden>Cancel</button>
+  </form>
+  <% } else { %>
+    <p class="card"><a href="/login?next=/entry/<%= entry.id %>">Log in</a> to rate and review.</p>
+  <% } %>
+
+  <ul class="review-list" id="review-list">
+    <% reviews.forEach(r => { %>
+      <li class="review reveal" data-id="<%= r.id %>" data-rating="<%= r.rating %>">
+        <div class="review-top">
+          <strong><%= r.users ? r.users.name : 'Anonymous' %></strong>
+          <span class="stars-static"><%= '★'.repeat(r.rating) %><span><%= '★'.repeat(5 - r.rating) %></span></span>
+        </div>
+        <p class="review-body"><%= r.body %></p>
+        <time class="mono"><%= new Date(r.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) %></time>
+        <% if (user && (user.id === r.user_id || user.role === 'admin')) { %>
+          <span class="review-tools">
+            <% if (user.id === r.user_id) { %><button class="link mono" data-action="edit">Edit</button><% } %>
+            <button class="link mono" data-action="delete">Delete</button>
+          </span>
+        <% } %>
+      </li>
+    <% }) %>
+  </ul>
+  <% if (!reviews.length) { %><p class="mono empty" id="no-reviews">No reviews yet. Be the first.</p><% } %>
+</section>
+
+<script src="/js/entry.js" defer></script>
+<%- include('partials/footer') %>

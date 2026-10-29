@@ -1,0 +1,35 @@
+<%- include('partials/header') %>
+
+<section class="page-head">
+  <p class="mono">Ranked by average rating from member reviews</p>
+  <h1 class="big">The <span class="accent">Charts</span></h1>
+</section>
+
+<div class="tabs" role="tablist">
+  <button role="tab" aria-selected="true" data-tab="chart-films">Top films</button>
+  <button role="tab" aria-selected="false" data-tab="chart-songs">Top songs</button>
+</div>
+
+<% [['chart-films', films], ['chart-songs', songs]].forEach(([id, rows], n) => { %>
+<section class="tab-panel" id="<%= id %>" role="tabpanel" <%= n ? 'hidden' : '' %>>
+  <% if (rows.length) { %>
+    <ol class="chart">
+      <% rows.forEach((e, i) => { %>
+        <li class="chart-row reveal">
+          <span class="chart-rank"><%= i + 1 %></span>
+          <a href="/entry/<%= e.id %>" class="chart-title">
+            <%= e.title %>
+            <small class="mono"><%= e.creator %> · <%= e.year %></small>
+          </a>
+          <span class="chart-bar"><span class="bar bar-<%= e.color %>" style="--w: <%= (e.avg_rating / 5) * 100 %>%"></span></span>
+          <span class="chart-score"><%= e.avg_rating %><small class="mono"> / 5 · <%= e.review_count %> reviews</small></span>
+        </li>
+      <% }) %>
+    </ol>
+  <% } else { %>
+    <p class="card empty">No ratings yet. <a href="/archive">Review something →</a></p>
+  <% } %>
+</section>
+<% }) %>
+
+<%- include('partials/footer') %>

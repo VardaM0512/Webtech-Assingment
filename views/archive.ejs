@@ -1,0 +1,44 @@
+<%- include('partials/header') %>
+
+<section class="page-head">
+  <h1 class="big">The<br>Archive</h1>
+  <p class="mono">Search by title or maker. Results update as you type.</p>
+</section>
+
+<form class="filters" id="filters" role="search" onsubmit="return false">
+  <label class="field grow">
+    <span class="mono">Search</span>
+    <input type="search" name="q" placeholder="e.g. Sholay, Lata Mangeshkar…" autocomplete="off">
+  </label>
+
+  <fieldset class="chips">
+    <legend class="mono">Format</legend>
+    <label><input type="radio" name="kind" value="all" checked><span>All</span></label>
+    <label><input type="radio" name="kind" value="film"><span>Films</span></label>
+    <label><input type="radio" name="kind" value="song"><span>Songs</span></label>
+  </fieldset>
+
+  <label class="field">
+    <span class="mono">Genre</span>
+    <select name="genre">
+      <option value="all">All genres</option>
+      <% genres.forEach(g => { %><option value="<%= g %>"><%= g %></option><% }) %>
+    </select>
+  </label>
+
+  <label class="field">
+    <span class="mono">Sort</span>
+    <select name="sort">
+      <option value="new">Newest first</option>
+      <option value="old">Oldest first</option>
+      <option value="az">A → Z</option>
+    </select>
+  </label>
+</form>
+
+<p class="mono result-count" id="count" aria-live="polite">Loading…</p>
+<div class="poster-grid" id="results"></div>
+<div class="center load-more-wrap"><button class="btn btn-ghost" id="load-more" hidden>Load more ↓</button></div>
+
+<script src="/js/archive.js" defer></script>
+<%- include('partials/footer') %>

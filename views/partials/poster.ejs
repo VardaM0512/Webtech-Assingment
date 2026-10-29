@@ -1,0 +1,6 @@
+<a href="/entry/<%= e.id %>" class="poster poster-<%= e.color %> reveal">
+  <span class="poster-kind"><%= e.kind %></span>
+  <span class="poster-title"><%= e.title %></span>
+  <span class="poster-meta"><%= e.creator %> · <%= e.year %></span>
+  <span class="poster-no">№<%= String(e.id).padStart(3, '0') %></span>
+</a>

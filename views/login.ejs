@@ -1,0 +1,27 @@
+<%- include('partials/header') %>
+
+<section class="auth">
+  <div class="auth-art" aria-hidden="true">
+    <span>Wel</span><span>come</span><span class="accent">back.</span>
+  </div>
+
+  <form action="/login" method="POST" class="card auth-form" data-validate>
+    <h1>Log in</h1>
+    <% if (error) { %><p class="error" role="alert"><%= error %></p><% } %>
+    <input type="hidden" name="next" value="<%= next %>">
+
+    <label class="field">
+      <span class="mono">Email</span>
+      <input type="email" name="email" value="<%= email %>" required autocomplete="email">
+    </label>
+    <label class="field">
+      <span class="mono">Password</span>
+      <input type="password" name="password" required minlength="6" autocomplete="current-password">
+    </label>
+
+    <button class="btn btn-block">Log in →</button>
+    <p class="mono small">New here? <a href="/signup">Make an account</a></p>
+  </form>
+</section>
+
+<%- include('partials/footer') %>
